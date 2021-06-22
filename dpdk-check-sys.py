@@ -44,13 +44,16 @@ def check_cpu_freq():
 
 def check_cpu_scaling_governor():
     x = read_sys_info('/sys/devices/system/cpu/cpu0/cpufreq/scaling_governor')
-    if not x: 
+    if not x:
+        x = os.popen('tuned-adm active').read().split(':')[1]
+    if not x:
         x = '?'
 
-    if x != 'performance':
-        print "[error] CPU scaling is %s" % x
-    else:
+    if 'performance' in x:
         print "[OK] CPU scaling is %s" % x
+    else:
+        print "[error] CPU scaling is %s" % x
+
 
 def check_swap_enabled():
     fn = '/etc/fstab'
@@ -91,15 +94,18 @@ def check_transparent_huge_pages():
     # To disable THP:
     # echo never > /sys/kernel/mm/transparent_hugepage/enabled
     err_msg = 'error'
+    x = '?'
     s = read_sys_info('/sys/kernel/mm/transparent_hugepage/enabled').split()
 
-    for x in s:
-        if '[' in x:
-            if x == '[never]':
-                err_msg = 'OK'
-            break
-              
-    print "[%s] /sys/kernel/mm/transparent_hugepage/enabled: %s" % (err_msg, x)
+    if s:
+        for x in s:
+            if '[' in x:
+                if x == '[never]':
+                    err_msg = 'OK'
+                break
+                
+    print "[%s] transparent_hugepage/enabled: %s" % (err_msg, x)
+
     if err_msg != 'OK':
         print "\t - please add transparent_hugepage=never to cmdline"
 
@@ -178,12 +184,47 @@ def check_tsc():
     print "[error] - please add %s to cmdline" % cfg
 
 
+# Depending on your system, you'll find it in any one of these:
+# /proc/config.gz
+# /boot/config
+# /boot/config-$(uname -r)
+def check_linux_config():
+    paths = ('/proc/config.gz','/boot/config-'+os.uname()[2]) #,'/boot/config'
+    cfg = 'CONFIG_NO_HZ_FULL=y'
+
+    for fn in paths:
+        if os.path.exists(fn) :
+            if '.gz' in fn:
+                s = os.popen('cat '+ fn +' | gunzip 2>/dev/null').read()
+            else:
+                s = os.popen('cat '+ fn).read()
+
+            if cfg in s:
+                print "[OK]", cfg
+                return
+
+    print "[error] - %s not found" % cfg
+
+def check_hyperthreading():
+    s = os.popen('lscpu').read().split('\n')
+    n = 1
+    for x in s:
+        if 'Thread(s) per core' in x:
+            n = int(x.split(':')[1])
+            break
+
+    if n>1:
+        print "[warning] - HT enabled"
+    else:
+        print "[OK] HT disabled"
+
 if __name__ == "__main__":
 
     print
     msg = "# Checking DPDK system readyness"
     print msg
     print "="*len(msg)
+    check_hyperthreading()
     check_swap_enabled()
     check_huge_pages()
     check_irq_balance()
@@ -193,3 +234,4 @@ if __name__ == "__main__":
     check_cpu_scaling_governor()
     check_cpu_freq()
     check_transparent_huge_pages()
+    check_linux_config()
