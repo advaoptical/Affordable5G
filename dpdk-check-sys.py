@@ -82,6 +82,27 @@ def check_huge_pages():
     else:
         print "[error] HugePages_Total: %d" % n
 
+def check_transparent_huge_pages():
+    # Based on the 3.10 kernel operating system, the transparent huge page function 
+    # (THP) is turned on by default. THP will cause the operating system 
+    # to see that there are large pages and allocate large pages.
+    # When large pages cannot be allocated, traditional 4KB pages are allocated.
+    # The setting returned in brackets is your current setting
+    # To disable THP:
+    # echo never > /sys/kernel/mm/transparent_hugepage/enabled
+    err_msg = 'error'
+    s = read_sys_info('/sys/kernel/mm/transparent_hugepage/enabled').split()
+
+    for x in s:
+        if '[' in x:
+            if x == '[never]':
+                err_msg = 'OK'
+            break
+              
+    print "[%s] /sys/kernel/mm/transparent_hugepage/enabled: %s" % (err_msg, x)
+    if err_msg != 'OK':
+        print "\t - please add transparent_hugepage=never to cmdline"
+
 def check_irq_balance():
     stat = os.system('systemctl status irqbalance >/dev/null 2>&1')
     if stat != 0:
@@ -95,9 +116,14 @@ def check_irq_balance():
 """
 
 #
-# nohz_full - Reducing Scheduling-Clock Ticks
-# rcu_nocbs - lowering the number of interrupts for the specified cores
-#
+# isolcpus
+# • Remove cores from the general kernel SMP balancing and scheduler algorithms
+# rcu_nocbs
+# • prevents Read-Copy-Update (RCU) callback routines from being executed on the targeted cores
+# nohz_full
+# • Disables kernel timer tick interrupt. Triggered at a periodic interval to keep track of kernel statistics such as CPU and
+# memory usage
+# https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux_for_real_time/7/html/tuning_guide/offloading_rcu_callbacks
 def check_isol_cpu_cores():
     parms = ('isolcpu','nohz_full','rcu_nocbs')
     vals=["0","0","0"]
@@ -139,6 +165,17 @@ def check_pstate():
     
     print "[error] - please add intel_pstate=disable to cmdline"
 
+# 
+# Disables clocksource stability check interrupt for the Time Stamp Counter on all cores
+def check_tsc():
+    cfg = 'tsc=reliable'
+    s = read_sys_info('/proc/cmdline').split()
+    for x in s:
+        if cfg in x:
+            print "[OK]", cfg
+            return
+    
+    print "[error] - please add %s to cmdline" % cfg
 
 
 if __name__ == "__main__":
@@ -152,6 +189,7 @@ if __name__ == "__main__":
     check_irq_balance()
     check_isol_cpu_cores()
     check_pstate()
+    check_tsc()
     check_cpu_scaling_governor()
     check_cpu_freq()
-
+    check_transparent_huge_pages()
