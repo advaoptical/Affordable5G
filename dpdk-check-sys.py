@@ -109,17 +109,13 @@ def check_transparent_huge_pages():
     if err_msg != 'OK':
         print "\t - please add transparent_hugepage=never to cmdline"
 
-def check_irq_balance():
-    stat = os.system('systemctl status irqbalance >/dev/null 2>&1')
+def check_service(service):
+    stat = os.system('systemctl status '+service+' >/dev/null 2>&1')
     if stat != 0:
-        print "[OK] irqbalance not active"
+        print '[OK] '+service+' not active'
     else:
-        print \
-"""
-[error] - please deactivate irqbalance:
-\tsystemctl stop irqbalance
-\tsystemctl disable irqbalance
-"""
+        print "[error] - please deactivate %s:\
+        \n\tsystemctl stop %s \n\tsystemctl disable %s" % (service,service,service)
 
 #
 # isolcpus
@@ -188,9 +184,8 @@ def check_tsc():
 # /proc/config.gz
 # /boot/config
 # /boot/config-$(uname -r)
-def check_linux_config():
+def check_linux_config(cfg):
     paths = ('/proc/config.gz','/boot/config-'+os.uname()[2]) #,'/boot/config'
-    cfg = 'CONFIG_NO_HZ_FULL=y'
 
     for fn in paths:
         if os.path.exists(fn) :
@@ -221,17 +216,18 @@ def check_hyperthreading():
 if __name__ == "__main__":
 
     print
-    msg = "# Checking DPDK system readyness"
+    msg = "# Checking DPDK system readyness, kernel: "+os.uname()[2]
     print msg
     print "="*len(msg)
     check_hyperthreading()
     check_swap_enabled()
     check_huge_pages()
-    check_irq_balance()
     check_isol_cpu_cores()
     check_pstate()
     check_tsc()
     check_cpu_scaling_governor()
     check_cpu_freq()
     check_transparent_huge_pages()
-    check_linux_config()
+    check_linux_config('CONFIG_NO_HZ_FULL=y')
+    check_service('irqbalance')
+    check_service('impi')
