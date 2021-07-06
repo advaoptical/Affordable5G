@@ -53,6 +53,7 @@ def check_cpu_scaling_governor():
         print "[OK] CPU scaling is %s" % x
     else:
         print "[error] CPU scaling is %s" % x
+        print "\t please do: tuned-adm profile latency-performance"
 
 
 def check_swap_enabled():
