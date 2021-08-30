@@ -128,7 +128,7 @@ def check_service(service):
 # memory usage
 # https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux_for_real_time/7/html/tuning_guide/offloading_rcu_callbacks
 def check_isol_cpu_cores():
-    parms = ('isolcpu','nohz_full','rcu_nocbs')
+    parms = ('isolcpus','nohz_full','rcu_nocbs')
     vals=["0","0","0"]
     
     s = read_sys_info('/proc/cmdline').split()
@@ -143,7 +143,7 @@ def check_isol_cpu_cores():
     missed_parms = False
     for index, item in enumerate(vals):
         if item == "0":
-            print "[error] - please specify %s ?" % parms[index]
+            print "[error] - please specify %s " % parms[index]
             missed_parms = True
 
     if missed_parms:
