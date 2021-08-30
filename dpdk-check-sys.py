@@ -130,15 +130,14 @@ def check_service(service):
 def check_isol_cpu_cores():
     parms = ('isolcpu','nohz_full','rcu_nocbs')
     vals=["0","0","0"]
-    i=0
+    
     s = read_sys_info('/proc/cmdline').split()
     for x in s:
-        for y in parms:
+        for index, y in enumerate(parms):
             if y in x:
                 a = x.split('=')
                 print "[OK] %s" % a
-                vals[i]=a[1]
-                i = i+1
+                vals[index]=a[1]
 
     # print vals
     missed_parms = False
