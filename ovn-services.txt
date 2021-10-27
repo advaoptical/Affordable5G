@@ -1,0 +1,64 @@
+  strongswan.service                     loaded active running strongSwan IPsec IKEv1/IKEv2 daemon us
+  qat_service.service                    loaded active exited  LSB: modprobe the QAT modules, which l
+   irqbalance.service                     loaded active running irqbalance daemon
+  adv_systemd_session_clean.service loaded active running ADVA session cleanup service
+  ipmi.service                            loaded failed     failed       IPMI Driver
+  ipmievd.service                         loaded failed     failed       Ipmievd Daemon
+  netopeer.service                        loaded active     running      Overture netopeer-server daemon
+  sysrepo.service                                   loaded active     running      Overture sysrepo daemon
+  SysRepoSync.service                               loaded active     running      Overture Sysrepo  Maestro Client
+  vse_alarmhandler.service                          loaded active     running      Overture alarmHandler
+  vse_configserver.service                          loaded active     running      Overture configServer
+  vse_datapath.service                              loaded active     running      Overture Datapath Service
+  vse_db.service                                    loaded active     exited       Overture Database Service
+  vse_dpconfigclient.service                        loaded active     running      Overture Datapath Configuration Client
+  vse_eventserver.service                           loaded active     running      Overture eventServer
+  vse_flxclient.service                             loaded active     running      Overture FLX Configuration Client
+  vse_hwmonclient.service                           loaded active     running      Overture HwMon Configuration Client
+  vse_irqserver.service                             loaded active     running      Overture IRQ Server
+  vse_lacpconfigclient.service                      loaded active     running      Overture LACP Configuration Client
+  vse_lldpconfigclient.service                      loaded active     running      Overture LLDP Configuration Client
+  vse_loamconfigclient.service                      loaded active     running      Overture LOAM Configuration Client
+  vse_maestros.service                              loaded active     exited       Overture MaestrOS Service
+  vse_mgmteventhandler.service                      loaded active     running      Overture mgmtEventHandler
+  vse_pmserver.service                              loaded active     running      Overture PM Server
+  vse_pythonmgmt.service                            loaded active     running      Overture Python Management Service
+  vse_snmpagent.service                             loaded active     running      Overture SNMP Agent
+  vse_soamconfigclient.service                      loaded active     running      Overture SOAM Configuration Client
+  vse_ssconfigclient.service                        loaded active     running      Overture System Configuration Client
+  vse_twampconfigclient.service                     loaded active     running      Overture TWAMP Configuration Client
+  vse_vnfconfigclient.service                       loaded active     running      Overture VNF Configuration Cl
+    vse_advSysTune.service                            loaded active     running      ADVA System Tuning Daemon
+  vse_alarmhandler.service                          loaded active     running      Overture alarmHandler
+  vse_boot_info.service                             loaded active     exited       ADVA Connector Boot Information Service
+  vse_configserver.service                          loaded active     running      Overture configServer
+  vse_datapath.service                              loaded active     running      Overture Datapath Service
+  vse_db.service                                    loaded active     exited       Overture Database Service
+  vse_dpconfigclient.service                        loaded active     running      Overture Datapath Configuration Client
+  vse_eventserver.service                           loaded active     running      Overture eventServer
+  vse_flxclient.service                             loaded active     running      Overture FLX Configuration Client
+  vse_fwa-1010vc_reboot.service                     loaded active     exited       Adva Reboot Service for FWA-1010VC
+  vse_hwmonclient.service                           loaded active     running      Overture HwMon Configuration Client
+  vse_irqserver.service                             loaded active     running      Overture IRQ Server
+  vse_lacpconfigclient.service                      loaded active     running      Overture LACP Configuration Client
+  vse_lldpconfigclient.service                      loaded active     running      Overture LLDP Configuration Client
+  vse_loamconfigclient.service                      loaded active     running      Overture LOAM Configuration Client
+  vse_maestros.service                              loaded active     exited       Overture MaestrOS Service
+  vse_mgmteventhandler.service                      loaded active     running      Overture mgmtEventHandler
+  vse_pmserver.service                              loaded active     running      Overture PM Server
+  vse_prepare.service                               loaded active     exited       vSE Prepare
+  vse_pythonmgmt.service                            loaded active     running      Overture Python Management Service
+  vse_rm_tmp.service                                loaded active     exited       vSE Rm tmp
+  vse_rriManager.service                            loaded active     running      Adva RRI manager
+  vse_snmpagent.service                             loaded active     running      Overture SNMP Agent
+  vse_snmpsubagent.service                          loaded active     running      Simple Network Management Protocol (SNMP) Subagent
+  vse_soamconfigclient.service                      loaded active     running      Overture SOAM Configuration Client
+  vse_ssconfigclient.service                        loaded active     running      Overture System Configuration Client
+  vse_systemConfig.service                          loaded active     exited       Connector System Config File Create
+  vse_time_store.service                            loaded activating auto-restart 65vse Time Store
+  vse_twampconfigclient.service                     loaded active     running      Overture TWAMP Configuration Client
+  vse_vnfconfigclient.service                       loaded active     running      Overture VNF Configuration Client
+  vse_ztpconfigclient.service                       loaded active     running      ADVA Hello Configuration Client
+  vse_datapath.service                              loaded active     running      Overture Datapath Service
+  vse_db.service                                    loaded active     exited       Overture Database Service
+  vse_dpconfigclient.service                        loaded active     running      Overture Datapath Configurati
