@@ -1,14 +1,15 @@
 #! /usr/bin/env python
 #coding=utf-8
 ##############################################
-# Copyright (c) 2021
+# Copyright (c) 2021-2023
 # ADVA Optical Networking
-# This is the DPDK readyness checklist
+# This is the DPDK readiness checklist
 #  
 ##############################################
 from __future__ import print_function
 import os
 import platform
+import shutil
 
 
 def read_sys_info(fn):
@@ -91,7 +92,7 @@ def check_cpu_scaling_governor():
     if not x:
         x = '?'
 
-    if 'performance' in x:
+    if 'performance' in x or 'realtime' in x:
         print ("[OK] CPU scaling is", x)
     else:
         print ("[error] CPU scaling is", x)
@@ -214,7 +215,7 @@ def check_linux_config(cfg):
                 print ("[OK]", cfg)
                 return
 
-    print ("[error] - %s not found" % cfg)
+    print ("[error] - {} not found in {}".format(cfg, fn))
 
 def check_hyperthreading():
     s = os.popen('lscpu').read().split('\n')
@@ -234,9 +235,11 @@ def is_centos():
 
 
 def is_selinux_enabled():
-    s = os.popen('sestatus').read()
-    return 'disabled' in s
-
+    if shutil.which('sestatus'):
+        s = os.popen('sestatus').read()
+        return 'disabled' in s
+    else:
+        return True
 
 def check_cmdline(cfg):
     s = read_sys_info('/proc/cmdline').split()
