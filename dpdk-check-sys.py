@@ -254,7 +254,7 @@ if __name__ == "__main__":
     print
     msg = "# Checking DPDK system readyness, kernel: "+os.uname()[2]
     print (msg)
-    print('\t', platform.dist())
+    #print('\t', platform.dist())
     print ("="*len(msg))
     check_cpu_freq()
     print_ddr_speed()
@@ -269,12 +269,12 @@ if __name__ == "__main__":
     # Disables clocksource stability check interrupt for the Time Stamp Counter on all cores
     check_cmdline('tsc=reliable')
 
-    if is_centos():
-        if is_selinux_enabled():
-            print ("[OK] selinux disabled")
-        else:
-            check_cmdline('selinux=0')
-            check_cmdline('enforcing=0')
+ #   if is_centos():
+    if is_selinux_enabled():
+        print ("[OK] selinux disabled")
+    else:
+        check_cmdline('selinux=0')
+        check_cmdline('enforcing=0')
 
     check_cmdline('intel_pstate=disable')
     check_cmdline('nmi_watchdog=0')
