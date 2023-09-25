@@ -59,6 +59,9 @@ def check_cpu_freq():
 
     s = os.popen('dmidecode -t 4').read().split('\t')
     for z in s:
+        if ('Family' in z) and ('Unknown' in z): # Empty CPU socket?
+            break
+
         if 'Version' in z:
             cpu_type = z.split(':')[1].rstrip('\n')
         elif 'Max Speed' in z:
@@ -170,6 +173,9 @@ def check_service(service):
 # • Disables kernel timer tick interrupt. Triggered at a periodic interval to keep track of kernel statistics such as CPU and
 # memory usage
 # https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux_for_real_time/7/html/tuning_guide/offloading_rcu_callbacks
+# 
+# domain removes the CPUs from the scheduling algorithm
+# https://ubuntu.com/blog/real-time-kernel-tuning
 def check_isol_cpu_cores():
     parms = ('isolcpus','nohz_full','rcu_nocbs')
     vals=["0","0","0"]
@@ -180,7 +186,9 @@ def check_isol_cpu_cores():
             if y in x:
                 a = x.split('=')
                 print ("[OK] %s" % a)
-                vals[index]=a[1]
+                # isolcpus=managed_irq,domain,1-12
+                b = a[1].split(',')
+                vals[index]=b[-1]
 
     # print vals
     missed_parms = False
@@ -265,6 +273,9 @@ if __name__ == "__main__":
     check_swap_enabled()
     check_huge_pages()
     check_isol_cpu_cores()
+    check_cmdline('intel_iommu=on')
+    check_cmdline('iommu=pt')
+
     # Completely eliminate timer interrupts on a set of cores
     check_linux_config('CONFIG_NO_HZ_FULL=y')
     check_cmdline('nohz=on')
