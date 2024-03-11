@@ -140,11 +140,12 @@ def check_transparent_huge_pages():
     # The setting returned in brackets is your current setting
     # To disable THP:
     # echo never > /sys/kernel/mm/transparent_hugepage/enabled
-    err_msg = 'error'
-    x = '?'
+    err_msg = 'OK'
+    x = 'not found'
     s = read_sys_info('/sys/kernel/mm/transparent_hugepage/enabled').split()
 
     if s:
+        err_msg = 'error'
         for x in s:
             if '[' in x:
                 if x == '[never]':
